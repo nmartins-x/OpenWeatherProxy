@@ -18,6 +18,6 @@ Finally, add an OpenWeather API key ([https://openweathermap.org/api](https://op
 ## Usage
 
 GET request:
-http://laravel.test/api/weather?city=London
+/api/weather?city=London
 or
-http://laravel.test/api/weather?city=London&country=CA
+/api/weather?city=London&country=CA
