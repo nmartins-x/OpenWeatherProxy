@@ -10,6 +10,8 @@ use App\Services\Weather\HttpClient;
 class OpenWeather implements WeatherService{
     protected $client;
     
+    protected $api_key;
+    
     /**
      * Constructor
      * 
@@ -18,7 +20,8 @@ class OpenWeather implements WeatherService{
     public function __construct() {
         $this->client = new HttpClient();
         $this->client->api_endpoint = env('OPENWEATHER_API_ENDPOINT');
-        $this->client->api_key = env('OPENWEATHER_API_KEY');
+        
+        $this->api_key = env('OPENWEATHER_API_KEY');
     }
     
     /**
@@ -30,6 +33,9 @@ class OpenWeather implements WeatherService{
      */
     public function getLocaleWeather(array $query_parameters = []): string {
         $this->client->resource = '/data/2.5/weather';
+        
+        // insert API key
+        $query_parameters['appid'] = $this->api_key;
         
         $response = $this->client->getRequest($query_parameters); 
                 

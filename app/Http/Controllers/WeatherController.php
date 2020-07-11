@@ -4,10 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Request\ShowWeatherRequest;
 use App\Services\Weather\WeatherService;
-use App\Models\Weather;
+use App\Repositories\WeatherRepository;
 use Illuminate\Http\JsonResponse;
 
 class WeatherController extends Controller {
+    protected $repository;
+  
+    public function __construct(WeatherRepository $repository)
+    {
+        $this->repository = $repository;
+    }
     /**
      * Show weather report for a city/country in Json format
      * 
@@ -17,7 +23,7 @@ class WeatherController extends Controller {
      */
     public function show(ShowWeatherRequest $request, WeatherService $weather): JsonResponse
     {
-        Weather::store(
+        $this->repository->store(
                 $weather->getLocaleWeather([
                     'q' => $request->city . ',' . $request->country,
                     'units' => 'metric'
@@ -25,9 +31,9 @@ class WeatherController extends Controller {
         );
 
         return response()->json([
-            'city' => Weather::getCityName(), 
-            'country' => Weather::getCountryName(), 
-            'temperature' => Weather::getTemperatureInAllFormats()
+            'city' => $this->repository->getCityName(), 
+            'country' => $this->repository->getCountryName(), 
+            'temperature' => $this->repository->getTemperatureInAllFormats()
             ], 200);
     }
 
